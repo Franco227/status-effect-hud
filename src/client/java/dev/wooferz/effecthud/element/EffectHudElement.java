@@ -14,7 +14,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -23,10 +22,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.awt.Color;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static dev.wooferz.effecthud.StatusEffectHUDClient.disableVanillaGui;
 
@@ -83,8 +80,11 @@ public class EffectHudElement extends HUDElement {
 
             for (StatusEffectInstance effect : effects) {
                 StatusEffect effectType = effect.getEffectType().value();
-                String registryName = String.valueOf(Registries.STATUS_EFFECT.getId(effectType)).replaceFirst("^minecraft:", "");
-                Identifier texture = Identifier.of("minecraft", "textures/mob_effect/" + registryName + ".png");
+                String[] effectParts = String.valueOf(Registries.STATUS_EFFECT.getId(effectType)).split(":");
+                String effectNamespace = effectParts[0];
+                String effectTextureName = effectParts[1];
+
+                Identifier texture = Identifier.of(effectNamespace, "textures/mob_effect/" + effectTextureName + ".png");
 
                 String amplifier = " " + (effect.getAmplifier() + 1);
 
